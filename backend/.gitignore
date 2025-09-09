@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pyo
+*.pyd
+*.env
+*.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django
+db.sqlite3
+media/
+static/
+celerybeat-schedule
+*.log
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+*.seed
+*.bak
+*.swp
+*.swo
+*.tmp
+*.orig
+
+# Environment
+.env
+.env.*
+!.env.example
+sample.env
+
+# Migrations
+**/migrations/*.pyc
+**/migrations/__pycache__/
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Coverage
+htmlcov/
+.coverage
+.tox/
+.nox/
+.cache/
+pytest_cache/
+.coverage.*
+
+# Build
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Others
+celerybeat-schedule
+postgres_data/
+static_volume/

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>یادآوری رویداد: {{ event.title }}</title>
+    <style>
+        body {
+            font-family: 'Tahoma', 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            direction: rtl;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #168085;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #168085;
+            margin-bottom: 10px;
+        }
+        .event-badge {
+            display: inline-block;
+            background-color: #168085;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .event-details {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .detail-label {
+            font-weight: bold;
+            min-width: 100px;
+            color: #168085;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #168085;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #168085;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">انجمن علوم کامپیوتر</div>
+            <p>یادآوری رویداد</p>
+        </div>
+
+        <div class="event-badge">
+            {% if event.event_type == 'in_person' %}حضوری
+            {% elif event.event_type == 'online' %}آنلاین
+            {% else %}ترکیبی{% endif %}
+        </div>
+
+        <h1>🎉 {{ event.title }}</h1>
+
+        <p>سلام {{ user.get_full_name|default:user.username }}،</p>
+
+        <p>این یادآوری دوستانه‌ای است برای رویداد آینده‌ای که در آن ثبت‌نام کرده‌اید:</p>
+
+        <div class="event-details">
+            <div class="detail-row">
+                <span class="detail-label">📅 تاریخ:</span>
+                <span>{{ event.start_time|date:"j F Y" }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">🕐 زمان:</span>
+                <span>{{ event.start_time|time:"H:i" }} - {{ event.end_time|time:"H:i" }}</span>
+            </div>
+            {% if event.event_type == 'in_person' %}
+            <div class="detail-row">
+                <span class="detail-label">📍 مکان:</span>
+                <span>{{ event.address }}</span>
+            </div>
+            {% elif event.event_type == 'online' %}
+            <div class="detail-row">
+                <span class="detail-label">💻 آنلاین:</span>
+                <span><a href="{{ event.online_link }}">ورود به جلسه</a></span>
+            </div>
+            {% endif %}
+            {% if event.price > 0 %}
+            <div class="detail-row">
+                <span class="detail-label">💰 قیمت:</span>
+                <span>{{ event.price }} تومان</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <div style="margin: 20px 0;">
+            {{ event.description_html|safe|truncatewords:50 }}
+        </div>
+
+        <div style="text-align: center;">
+            <a href="{{ event_url }}" class="cta-button">مشاهده جزئیات رویداد</a>
+        </div>
+
+        <p><strong>مهم:</strong> لطفاً ۱۵ دقیقه زودتر حاضر شوید. اگر نمی‌توانید شرکت کنید، لطفاً ثبت‌نام خود را لغو کنید تا دیگران بتوانند شرکت کنند.</p>
+
+        <div class="footer">
+            <p><strong>انجمن علوم کامپیوتر</strong></p>
+            <div class="social-links">
+                <a href="https://www.instagram.com/your_association_instagram">📷 اینستاگرام</a>
+                <a href="https://t.me/your_association_telegram">📱 تلگرام</a>
+            </div>
+            <p>سوالی دارید؟ به این ایمیل پاسخ دهید یا از طریق شبکه‌های اجتماعی با ما تماس بگیرید.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -41,8 +41,7 @@ class Event(BaseModel):
     capacity = models.PositiveIntegerField(null=True, blank=True,
                                            help_text="Maximum number of attendees (leave blank for unlimited)")
 
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True,
-                                help_text="Price of the event. Leave blank for free events.")
+    price = models.IntegerField(default=0, help_text="Price of the event. Leave blank for free events.")
 
     registration_start_date = models.DateTimeField(null=True, blank=True)
     registration_end_date = models.DateTimeField(null=True, blank=True)
@@ -78,10 +77,6 @@ class Event(BaseModel):
 
     @property
     def is_registration_open(self):
-        """Check if registration is currently open (only if price is not null or capacity is set)"""
-        if self.price is None and self.capacity is None:
-            return False
-
         now = timezone.now()
         return (self.registration_start_date is None or now >= self.registration_start_date) and \
             (self.registration_end_date is None or now <= self.registration_end_date)

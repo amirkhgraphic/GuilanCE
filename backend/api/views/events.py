@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.utils.text import slugify
 
 from ninja import Router
+from ninja.errors import HttpError
 from typing import List, Optional
 
 from api.authentication import jwt_auth
@@ -116,28 +117,37 @@ def list_event_registrations(request, event_id: int, limit: int = 20, offset: in
     registrations = queryset[offset:offset + limit]
     return registrations
 
-@events_router.post("/{int:event_id}/register", response={200: RegistrationSchema, 400: ErrorSchema}, auth=jwt_auth)
+@events_router.post("/{int:event_id}/register", response=RegistrationSchema, auth=jwt_auth)
 def register_for_event(request, event_id: int):
     """Register current user for an event"""
     event = get_object_or_404(Event, id=event_id, is_deleted=False)
     user = request.auth
 
-    # Check if registration is open and has available slots
-    if not event.is_registration_open:
-        return 400, {"error": "Registration is not open for this event"}
+    if event.capacity and event.capacity == 0:
+        raise HttpError(400, "Capacity is full for this event.")
+    
+    if event.registration_end_date and event.registration_end_date < timezone.now():
+        raise HttpError(400, "Registration time has ended.")
+    
+    if event.registration_start_date and event.registration_start_date > timezone.now():
+        raise HttpError(400, "Registration time has not started yet.")
 
     if not event.has_available_slots:
-        return 400, {"error": "Event is full"}
+        raise HttpError(400, "Event is full")
 
     # Create or get existing registration
     registration, created = Registration.objects.get_or_create(
         event=event,
         user=user,
-        defaults={'status': 'pending'}
+        defaults={'status': Registration.StatusChoices.PENDING}
     )
 
-    if not created:
-        return 400, {"error": "Already registered for this event"}
+    if not created and registration.status == Registration.StatusChoices.CONFIRMED:
+        return HttpError(400, "Already registered for this event")
+    
+    if not event.price:
+        registration.status = Registration.StatusChoices.CONFIRMED
+        registration.save(update_fields=["status"])
 
     return registration
 

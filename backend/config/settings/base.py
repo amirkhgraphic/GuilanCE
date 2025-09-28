@@ -38,6 +38,7 @@ LOCAL_APPS = [
     'gallery',
     'events',
     'communications',
+    'payments',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -210,9 +211,10 @@ LOGGING = {
 # Create logs directory
 os.makedirs(BASE_DIR / 'logs', exist_ok=True)
 
-FRONTEND_ROOT = config('FRONTEND_ROOT', 'http://localhost:3000/')
-FRONTEND_PASSWORD_RESET_PAGE = config('FRONTEND_PASSWORD_RESET_PAGE', 'http://localhost:3000/api/auth/reset-password-confirm/')
+FRONTEND_ROOT = config('FRONTEND_ROOT', default='http://localhost:3000/')
+FRONTEND_PASSWORD_RESET_PAGE = config('FRONTEND_PASSWORD_RESET_PAGE', default='http://localhost:3000/api/auth/reset-password-confirm/')
 
 from config.services.unfold import *
 from config.services.location import *
 from config.services.notifications import *
+from config.services.zarinpal import *

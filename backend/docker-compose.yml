@@ -64,18 +64,17 @@ services:
     env_file:
       - .env
 
-#  # Next.js or React.js Frontend
-#  frontend:
-#    build:
-#      context: ../frontend
-#      dockerfile: Dockerfile
-#    ports:
-#      - "3000:3000"
-#    environment:
-#      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
-#      - NODE_ENV=production
-#    depends_on:
-#      - web
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_BASE=http://web:8000
+    depends_on:
+      - web
 
 volumes:
   postgres_data:

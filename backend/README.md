@@ -45,7 +45,7 @@ A comprehensive Django backend for a university computer science association web
 
 4. **Access the Application**
    - API: http://localhost:8000/api/docs
-   - Admin: http://localhost:8000/admin/
+   - Admin: http://localhostx:8000/admin/
    - Flower (Celery Monitor): http://localhost:5555/
 
 ## API Endpoints

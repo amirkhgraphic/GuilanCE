@@ -1,8 +1,9 @@
 from django.conf import settings
-from ninja.security import HttpBearer  
-from datetime import datetime, timedelta
-from django.utils import timezone
+
+from ninja.security import HttpBearer
+from datetime import datetime, timedelta, UTC
 import jwt
+
 from users.models import User
 
 class JWTAuth(HttpBearer):
@@ -18,21 +19,24 @@ class JWTAuth(HttpBearer):
         return None
 
 def create_jwt_token(user):
+    """Create JWT token for user"""
     payload = {
         'user_id': user.id,
         'email': user.email,
-        'exp': timezone.now() + timedelta(seconds=settings.JWT_ACCESS_TOKEN_LIFETIME),
-        'iat': timezone.now(),
+        'exp': datetime.now(UTC) + timedelta(seconds=settings.JWT_ACCESS_TOKEN_LIFETIME),
+        'iat': datetime.now(UTC),
     }
     return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
 def create_refresh_token(user):
+    """Create refresh token for user"""
     payload = {
         'user_id': user.id,
         'type': 'refresh',
-        'exp': timezone.now() + timedelta(seconds=settings.JWT_REFRESH_TOKEN_LIFETIME),
-        'iat': timezone.now(),
+        'exp': datetime.now(UTC) + timedelta(seconds=settings.JWT_REFRESH_TOKEN_LIFETIME),
+        'iat': datetime.now(UTC),
     }
     return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
+# Create auth instance
 jwt_auth = JWTAuth()

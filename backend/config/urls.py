@@ -15,7 +15,7 @@ api.add_router("", api_router)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', api.urls),    
+    path('api/', api.urls),
 ]
 
 if settings.DEBUG:

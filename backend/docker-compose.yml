@@ -4,32 +4,20 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
 
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
 
   web:
     build: .
-    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
       - static_volume:/app/static
@@ -37,64 +25,56 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - db
+      - redis
     env_file:
       - .env
 
   celery:
     build: .
-    command: celery -A config worker -l info --uid=1000 --hostname=celery-worker@%h
+    command: celery -A config worker -l info
     volumes:
       - .:/app
     depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - db
+      - redis
     env_file:
       - .env
 
   celery-beat:
     build: .
-    command: celery -A config beat -l info --hostname=celery-beat@%h
+    command: celery -A config beat -l info
     volumes:
       - .:/app
     depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - db
+      - redis
     env_file:
       - .env
 
   flower:
     build: .
-    command: celery -A config flower --broker=redis://redis:6379/0
+    command: celery -A config flower
     volumes:
       - .:/app
     ports:
       - "5555:5555"
     depends_on:
-      redis:
-        condition: service_healthy
+      - redis
     env_file:
       - .env
 
-# Next.js or React.js Frontend
-# frontend:
-#   build:
-#     context: ../frontend
-#     dockerfile: Dockerfile
-#   ports:
-#     - "3000:3000"
-#   environment:
-#     - NEXT_PUBLIC_API_URL=http://web:8000/api  # Changed to use internal service name
-#     - NODE_ENV=production
-#   depends_on:
-#     - web
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_BASE=http://web:8000
+    depends_on:
+      - web
 
 volumes:
   postgres_data:

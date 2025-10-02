@@ -1,6 +1,6 @@
-# CS Association Backend
+# CE Association Backend
 
-A comprehensive Django backend for a university computer science association website with blog functionality, user management, and gallery features.
+A comprehensive Django backend for a university computer engineering association website with blog functionality, user management, and gallery features.
 
 ## Features
 
@@ -26,22 +26,21 @@ A comprehensive Django backend for a university computer science association web
 ## Quick Start
 
 1. **Clone and Setup**
-   \`\`\`bash
+   ```bash
    git clone <repository-url>
    cd backend
    cp .env.example .env
-   # Edit .env with your configuration
-   \`\`\`
+   ```
 
 2. **Run with Docker**
-   \`\`\`bash
+   ```bash
    docker-compose up --build
-   \`\`\`
+   ```
 
 3. **Create Superuser**
-   \`\`\`bash
+   ```bash
    docker-compose exec web python manage.py createsuperuser
-   \`\`\`
+   ```
 
 4. **Access the Application**
    - API: http://localhost:8000/api/docs
@@ -51,28 +50,28 @@ A comprehensive Django backend for a university computer science association web
 ## API Endpoints
 
 ### Authentication
-- \`POST /api/auth/register\` - Register new user
-- \`POST /api/auth/login\` - Login user
-- \`GET /api/auth/verify-email/{token}\` - Verify email
-- \`GET /api/auth/profile\` - Get user profile
-- \`PUT /api/auth/profile\` - Update user profile
-- \`POST /api/auth/profile/picture\` - Upload profile picture
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login user
+- `GET /api/auth/verify-email/{token}` - Verify email
+- `GET /api/auth/profile` - Get user profile
+- `PUT /api/auth/profile` - Update user profile
+- `POST /api/auth/profile/picture` - Upload profile picture
 
 ### Blog
-- \`GET /api/blog/posts\` - List posts
-- \`GET /api/blog/posts/{slug}\` - Get post detail
-- \`POST /api/blog/posts\` - Create post (committee only)
-- \`PUT /api/blog/posts/{slug}\` - Update post
-- \`DELETE /api/blog/posts/{slug}\` - Delete post
-- \`GET /api/blog/posts/{slug}/comments\` - List comments
-- \`POST /api/blog/posts/{slug}/comments\` - Create comment
-- \`POST /api/blog/posts/{slug}/like\` - Toggle like
+- `GET /api/blog/posts` - List posts
+- `GET /api/blog/posts/{slug}` - Get post detail
+- `POST /api/blog/posts` - Create post (committee only)
+- `PUT /api/blog/posts/{slug}` - Update post
+- `DELETE /api/blog/posts/{slug}` - Delete post
+- `GET /api/blog/posts/{slug}/comments` - List comments
+- `POST /api/blog/posts/{slug}/comments` - Create comment
+- `POST /api/blog/posts/{slug}/like` - Toggle like
 
 ### Gallery
-- \`GET /api/gallery/images\` - List gallery images
-- \`POST /api/gallery/images\` - Upload image (committee only)
-- \`PUT /api/gallery/images/{id}\` - Update image metadata
-- \`DELETE /api/gallery/images/{id}\` - Delete image
+- `GET /api/gallery/images` - List gallery images
+- `POST /api/gallery/images` - Upload image (committee only)
+- `PUT /api/gallery/images/{id}` - Update image metadata
+- `DELETE /api/gallery/images/{id}` - Delete image
 
 ## User Roles
 
@@ -84,40 +83,40 @@ A comprehensive Django backend for a university computer science association web
 ## Development
 
 ### Running Tests
-\`\`\`bash
+```bash
 docker-compose exec web python manage.py test
-\`\`\`
+```
 
 ### Database Migrations
-\`\`\`bash
+```bash
 docker-compose exec web python manage.py makemigrations
 docker-compose exec web python manage.py migrate
-\`\`\`
+```
 
 ### Collect Static Files
-\`\`\`bash
+```bash
 docker-compose exec web python manage.py collectstatic
-\`\`\`
+```
 
 ### Shell Access
-\`\`\`bash
+```bash
 docker-compose exec web python manage.py shell
-\`\`\`
+```
 
 ## Environment Variables
 
 Key environment variables (see .env.example for full list):
 
-- \`SECRET_KEY\`: Django secret key
-- \`DEBUG\`: Debug mode (True/False)
-- \`DB_NAME\`, \`DB_USER\`, \`DB_PASSWORD\`: Database configuration
-- \`EMAIL_HOST\`, \`EMAIL_HOST_USER\`, \`EMAIL_HOST_PASSWORD\`: Email configuration
-- \`JWT_SECRET_KEY\`: JWT signing key
-- \`REDIS_URL\`: Redis connection URL
+- `SECRET_KEY`: Django secret key
+- `DEBUG`: Debug mode (True/False)
+- `DB_NAME`, `DB_USER`, `DB_PASSWORD`: Database configuration
+- `EMAIL_HOST`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`: Email configuration
+- `JWT_SECRET_KEY`: JWT signing key
+- `REDIS_URL`: Redis connection URL
 
 ## Production Deployment
 
-1. Set \`DEBUG=False\` in environment
+1. Set `DEBUG=False` in environment
 2. Configure proper email settings
 3. Set up SSL/HTTPS
 4. Configure static file serving
@@ -135,19 +134,3 @@ Key environment variables (see .env.example for full list):
 ## License
 
 This project is licensed under the MIT License.
-\`\`\`
-
-This completes the comprehensive Django backend project with all the requested features:
-
-✅ **Utils App**: BaseModel with soft delete functionality
-✅ **Users App**: Custom user model with JWT auth and email verification  
-✅ **Blog App**: Full blog system with markdown support
-✅ **Gallery App**: Image management with compression
-✅ **Django Ninja API**: Complete RESTful API
-✅ **Celery + Redis**: Background task processing
-✅ **Docker Setup**: Production-ready containerization
-✅ **Admin Interface**: Django Unfold with import/export
-✅ **Email Templates**: HTML email templates
-✅ **Production Settings**: Separate dev/prod configurations
-
-The project is ready to run with `docker-compose up --build`!
